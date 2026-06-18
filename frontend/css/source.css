@@ -1,0 +1,139 @@
+/* Source management views (book sources / rss sources / replace rules) */
+
+.source-toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.source-toolbar .grow { flex: 1; }
+
+.source-group-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.group-tab {
+  padding: 5px 12px;
+  border-radius: 16px;
+  background: var(--paper-3);
+  color: var(--text-soft);
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.12s;
+}
+.group-tab:hover { background: var(--ink-500); color: var(--paper); }
+.group-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.source-table-wrap {
+  background: #fff;
+  border: 1px solid var(--paper-3);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: auto;
+}
+.source-table { width: 100%; border-collapse: collapse; min-width: 720px; }
+.source-table th, .source-table td {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 13px;
+  border-bottom: 1px solid var(--paper-2);
+  vertical-align: middle;
+}
+.source-table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-dim);
+  background: var(--paper-2);
+  position: sticky;
+  top: 0;
+}
+.source-table tbody tr:hover { background: var(--paper-2); }
+.source-table .src-name { font-weight: 600; color: var(--ink-900); }
+.source-table .src-url {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.source-table .src-group { font-size: 12px; color: var(--text-soft); }
+.source-table .row-actions { display: flex; gap: 4px; justify-content: flex-end; }
+
+/* Source editor form (modal) */
+.source-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.source-form .full { grid-column: 1 / -1; }
+.source-form .field-label { font-size: 11px; }
+.rule-section {
+  grid-column: 1 / -1;
+  margin-top: 8px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--paper-3);
+}
+.rule-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* debug console */
+.debug-console {
+  background: var(--ink-900);
+  color: #c8e6c9;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  max-height: 320px;
+  overflow-y: auto;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.debug-console .line-err { color: #ef9a9a; }
+.debug-console .line-info { color: #90caf9; }
+.debug-console .line-ok { color: #a5d6a7; }
+
+/* replace rule specific */
+.rule-list .rule-card {
+  background: #fff;
+  border: 1px solid var(--paper-3);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.rule-card .rule-name { font-weight: 600; color: var(--ink-900); min-width: 120px; }
+.rule-card .rule-pattern {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-soft);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rule-card .rule-repl {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+}
+
+@media (max-width: 760px) {
+  .source-form { grid-template-columns: 1fr; }
+}

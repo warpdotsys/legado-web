@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#3b4252">
+  <title>阅读 · Web 版</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="stylesheet" href="/css/bookshelf.css">
+  <link rel="stylesheet" href="/css/reader.css">
+  <link rel="stylesheet" href="/css/source.css">
+  <link rel="stylesheet" href="/css/search.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Top navigation -->
+    <header class="topbar">
+      <div class="topbar-brand">
+        <span class="brand-mark">阅</span>
+        <span class="brand-text">阅读 Web</span>
+      </div>
+      <nav class="topbar-nav" id="nav">
+        <a href="#/bookshelf" data-route="bookshelf" class="nav-item">书架</a>
+        <a href="#/search" data-route="search" class="nav-item">搜索</a>
+        <a href="#/bookSource" data-route="bookSource" class="nav-item">书源</a>
+        <a href="#/rssSource" data-route="rssSource" class="nav-item">订阅源</a>
+        <a href="#/replaceRule" data-route="replaceRule" class="nav-item">替换规则</a>
+        <a href="#/about" data-route="about" class="nav-item">关于</a>
+      </nav>
+      <div class="topbar-actions">
+        <span class="conn-status" id="connStatus" title="后端连接状态">●</span>
+      </div>
+    </header>
+
+    <!-- Main view mount -->
+    <main class="content" id="view"></main>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Modal root -->
+    <div class="modal-root" id="modalRoot"></div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/views/bookshelf.js"></script>
+  <script src="/js/views/reader.js"></script>
+  <script src="/js/views/search.js"></script>
+  <script src="/js/views/bookSource.js"></script>
+  <script src="/js/views/rssSource.js"></script>
+  <script src="/js/views/replaceRule.js"></script>
+  <script src="/js/views/about.js"></script>
+  <script src="/js/router.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

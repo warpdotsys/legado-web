@@ -1,0 +1,31 @@
+# build / vcs
+.git
+.gitignore
+.gitattributes
+
+# python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+.venv/
+venv/
+env/
+
+# node (frontend is plain JS, no build step — but ignore just in case)
+frontend/node_modules/
+frontend/dist/
+**/npm-debug.log*
+
+# docs / editor noise
+*.md
+!README.md
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# local test artifacts
+*.db
+*.db-journal
+/tmp/
+.env

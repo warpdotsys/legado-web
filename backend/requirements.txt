@@ -1,0 +1,5 @@
+# Optional parsers improve book-source rule coverage.
+# The server runs fine with only the standard library; these speed up
+# HTML/XPath evaluation and are used by rule_engine.py if present.
+beautifulsoup4>=4.12
+lxml>=5.0

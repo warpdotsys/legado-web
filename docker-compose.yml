@@ -1,0 +1,23 @@
+# legado-web — Docker Compose
+#   docker compose up -d --build
+#   open http://localhost:1122
+
+services:
+  legado-web:
+    build: .
+    image: legado-web:latest
+    container_name: legado-web
+    restart: unless-stopped
+    ports:
+      - "1122:1122"   # HTTP API + Web UI
+      - "1123:1123"   # WebSocket (debug/search)
+    environment:
+      LEGADO_WEB_PORT: "1122"
+      LEGADO_DB: "/data/legado.db"
+      # uncomment to override the DB filename / frontend dir:
+      # LEGADO_FRONTEND_DIR: "/app/frontend"
+    volumes:
+      - legado-data:/data
+
+volumes:
+  legado-data:

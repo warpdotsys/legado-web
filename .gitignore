@@ -1,0 +1,27 @@
+# python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# local data / databases
+*.db
+*.db-journal
+/data/
+
+# node (frontend is plain JS — no build step)
+frontend/node_modules/
+frontend/dist/
+
+# editor / os
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# env
+.env
+.env.*
