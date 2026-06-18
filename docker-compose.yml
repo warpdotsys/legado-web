@@ -4,7 +4,14 @@
 
 services:
   legado-web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # Build with host networking so pip can resolve pypi.org. Some Docker
+      # hosts (e.g. the de.medwarp.cn deploy target) route build-container
+      # DNS through a resolver the build net cannot reach. Remove this line
+      # if your build network has working DNS.
+      network: host
     image: legado-web:latest
     container_name: legado-web
     restart: unless-stopped
