@@ -52,3 +52,24 @@ These are the ACTUAL legado paths (matching HttpServer.kt), not intuitive ones:
 ## Verified working (as of deploy)
 Container `legado-web` healthy, restart unless-stopped, data in `legado-web_legado-data` volume.
 Fresh DB auto-seeds one demo book source "笔趣阁(示例源)".
+
+## Reverse proxy: read.medwarp.cn (Cloudflare → Pangolin/newt → de:1122)
+- The public domain `https://read.medwarp.cn` fronts de.medwarp.cn:1122 via an
+  EXTERNAL reverse proxy (Cloudflare, per `Alt-Svc: h3` response header) +
+  Pangolin/newt tunnel. NOT the 1Panel nginx-proxy-manager on the box (that only
+  has photos.warpdotsys.com). Don't try to edit NPM for read.medwarp.cn.
+- newt (Pangolin edge agent, `systemctl restart newt`) tunnels tcp proxies:
+  10086, 1122, 2283, 4396, 5244, 8006, 81 — **1122 only, NOT 1123**.
+- If read.medwarp.cn returns 502/timeout: `sudo systemctl restart newt` on de
+  (re-establishes the Pangolin websocket tunnel), wait ~10s, retry.
+- **WebSocket MUST run on port 1122 (same as HTTP)**, not 1123, because the
+  reverse proxy only forwards 1122. The frontend (api.js) already opens
+  `wss://<same-origin>/searchBook` (same port). server.py detects
+  `Upgrade: websocket` in do_GET and does the RFC6455 upgrade in-place on 1122,
+  then hands to handle_ws_connection. Legacy :1123 listener kept as fallback.
+  Without this, wss handshake returns 200 (not 101) and search/debug break.
+- protocol_version=HTTP/1.1 set on the handler (Content-Length always sent, so
+  keep-alive is safe) so the 101 reads HTTP/1.1.
+- The sandbox CANNOT reach read.medwarp.cn over arbitrary ports either, but
+  443 works (curl + browser). Verify from the server:
+  `ssh root@de.medwarp.cn 'curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:1122/'`.
