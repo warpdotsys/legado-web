@@ -147,6 +147,7 @@ def serve_asset(rel: str):
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "legado-web/1.0"
+    protocol_version = "HTTP/1.1"
 
     def log_message(self, fmt, *args):  # quieter logs
         sys.stderr.write(f"[{time.strftime('%H:%M:%S')}] {self.address_string()} "
@@ -163,9 +164,36 @@ class Handler(BaseHTTPRequestHandler):
         self._cors()
         self.end_headers()
 
+    def _is_ws_upgrade(self):
+        up = self.headers.get("Upgrade", "").lower()
+        return up == "websocket" and self.headers.get("Sec-WebSocket-Key")
+
+    def _upgrade_ws(self, uri):
+        # HTTP→WebSocket upgrade on the same port (1122) so a single reverse
+        # proxy (e.g. Cloudflare → read.medwarp.cn) can serve both the API and
+        # the search/debug sockets without a second proxied port.
+        key = self.headers.get("Sec-WebSocket-Key")
+        try:
+            self.send_response(101)
+            self.send_header("Upgrade", "websocket")
+            self.send_header("Connection", "Upgrade")
+            self.send_header("Sec-WebSocket-Accept", _ws_accept(key))
+            self.end_headers()
+            self.connection.settimeout(None)
+            handle_ws_connection(self.connection, uri)
+        except Exception as e:
+            sys.stderr.write(f"[ws-upgrade] error: {e}\n")
+            try:
+                self.connection.close()
+            except Exception:
+                pass
+
     def do_GET(self):
         parsed = urlparse(self.path)
         uri = parsed.path
+        if self._is_ws_upgrade():
+            self._upgrade_ws(uri)
+            return
         params = {k: v for k, v in parse_qs(parsed.query).items()}
         result = handle_get(uri, params)
         if result is None:
@@ -405,7 +433,8 @@ def main():
     print("=" * 64)
     print(f" legado web service (Docker port)")
     print(f"   HTTP API + Web UI : http://0.0.0.0:{HTTP_PORT}")
-    print(f"   WebSocket         : ws://0.0.0.0:{WS_PORT}")
+    print(f"   WebSocket (same)  : ws://0.0.0.0:{HTTP_PORT} (Upgrade on :{HTTP_PORT})")
+    print(f"   WebSocket (legacy): ws://0.0.0.0:{WS_PORT}")
     print(f"   Frontend dir      : {FRONTEND_DIR}")
     print("=" * 64)
     try:
